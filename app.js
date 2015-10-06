@@ -1,5 +1,6 @@
 var express = require('express'),
-    path = require('path');
+    path = require('path'),
+    config = require('./config/config.js');
 
 var app = express();
 app.set('views', path.join(__dirname, 'views'));
@@ -8,14 +9,9 @@ app.set('view engine', 'html');
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('port', process.env.PORT || 3000);
+app.set('host', config.host);
 
-var router = express.Router();
-
-router.get('/', function(req, res, next){
-  res.render('index', {})
-});
-
-app.use('/', router);
+require('./routes/routes.js')(express, app);
 
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
