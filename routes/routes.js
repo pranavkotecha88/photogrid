@@ -1,4 +1,4 @@
-module.exports = function(express, app, formidable, fs, os, gm){
+module.exports = function(express, app, formidable, fs, os, gm, knoxClient){
   var router = express.Router();
 
   router.get('/', function(req, res, next){
@@ -33,7 +33,20 @@ module.exports = function(express, app, formidable, fs, os, gm){
         newForm.on('end', function(){
           fs.rename(tmpFile, nFile, function(){
             gm(nFile).resize(300).write(nFile, function(){
+              fs.readFile(nFile, function(err, buf){
+                var req = knoxClient.put(fName, {
+                  'Content-Length': buf.length,
+                  'Content-Type':'image/jpeg'
+                })
 
+                req.on('response', function(res){
+                  if(res.statusCode == 200){
+
+                  }
+                })
+
+                req.end(buf);
+              })
             })
           })
         })
