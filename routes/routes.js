@@ -75,8 +75,14 @@ module.exports = function(express, app, formidable, fs, os, gm, knoxClient, mong
   })
 
   router.get('/getimages', function(req, res, next){
-    singleImageModel.find({}, function(err, result) {
+    singleImageModel.find({}, null, {sort:{votes:-1}}, function(err, result) {
       res.send(JSON.stringify(result));
+    })
+  })
+
+  router.get('/voteup/:id', function(req, res, next){
+    singleImageModel.findByIdAndUpdate(req.params.id, {$inc:{votes:1}}, function(err, result){
+      res.send(200, {votes:result.votes});
     })
   })
 
