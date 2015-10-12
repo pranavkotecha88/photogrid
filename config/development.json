@@ -2,5 +2,6 @@
   "host":"http://localhost:3000",
   "S3AccessKey":"AKIAIWTSBC3LCO3YOL3Q",
   "S3Secret":"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",
-  "S3Bucket":"pmk-photogrid"
+  "S3Bucket":"pmk-photogrid",
+  "dbURL":"mongodb://photogrid:myphotogrid@dbh84.mongolab.com:27847/photogrid"
 }

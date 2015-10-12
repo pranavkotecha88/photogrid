@@ -1,4 +1,18 @@
-module.exports = function(express, app, formidable, fs, os, gm, knoxClient){
+module.exports = function(express, app, formidable, fs, os, gm, knoxClient, mongoose, io){
+
+  var Socket;
+
+  io.on('connection', function(socket){
+    Socket = socket;
+  })
+
+  var singleImage = new mongoose.Schema({
+    fileName : String,
+    votes: Number
+  })
+
+  var singleImageModel = mongoose.model('singleImage', singleImage);
+
   var router = express.Router();
 
   router.get('/', function(req, res, next){
@@ -38,13 +52,21 @@ module.exports = function(express, app, formidable, fs, os, gm, knoxClient){
                   'Content-Length': buf.length,
                   'Content-Type':'image/jpeg'
                 })
-
                 req.on('response', function(res){
                   if(res.statusCode == 200){
+                    var newImage = new singleImageModel({
+                      fileName: fName,
+                      votes : 0
+                    }).save();
 
+                    // Socket.emit('status', {'msg':'Saved !!', 'delay':3000});
+                    // Socket.emit('doUpdate', {});
+                    //
+                    // fs.unlink(nFile, function(){
+                    //   console.log('Local File Deleted !');
+                    // })
                   }
                 })
-
                 req.end(buf);
               })
             })
