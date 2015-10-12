@@ -4,7 +4,8 @@ var express = require('express'),
     knox = require('knox'),
     fs = require('fs'),
     os = require('os'),
-    formidable = require('formidable');
+    formidable = require('formidable')
+    gm = require('gm');
 
 var app = express();
 app.set('views', path.join(__dirname, 'views'));
@@ -21,7 +22,7 @@ var knoxClient = knox.createClient({
   bucket: config.S3Bucket
 });
 
-require('./routes/routes.js')(express, app, formidable, fs, os);
+require('./routes/routes.js')(express, app, formidable, fs, os, gm);
 
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
