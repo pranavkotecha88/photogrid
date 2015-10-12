@@ -59,12 +59,12 @@ module.exports = function(express, app, formidable, fs, os, gm, knoxClient, mong
                       votes : 0
                     }).save();
 
-                    // Socket.emit('status', {'msg':'Saved !!', 'delay':3000});
-                    // Socket.emit('doUpdate', {});
-                    //
-                    // fs.unlink(nFile, function(){
-                    //   console.log('Local File Deleted !');
-                    // })
+                    Socket.emit('status', {'msg':'Saved !!', 'delay':3000});
+                    Socket.emit('doUpdate', {});
+
+                    fs.unlink(nFile, function(){
+                      console.log('Local File Deleted !');
+                    })
                   }
                 })
                 req.end(buf);
@@ -72,6 +72,12 @@ module.exports = function(express, app, formidable, fs, os, gm, knoxClient, mong
             })
           })
         })
+  })
+
+  router.get('/getimages', function(req, res, next){
+    singleImageModel.find({}, function(err, result) {
+      res.send(JSON.stringify(result));
+    })
   })
 
   app.use('/', router);
